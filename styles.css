@@ -2,3 +2,9 @@
     display: flex;
     justify-content: center;
 }
+body {
+    background-color: #243119;
+}
+p {
+    color: white;
+}
