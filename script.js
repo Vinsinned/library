@@ -29,18 +29,31 @@ submit.style.cssText = 'margin-top: 20px;'
 //Div selectors
 let addBook = document.querySelector('#add-book');
 let addBookUI = document.querySelector('#submit-form')
-let displayBooks = document.querySelector('#book-display');
+let displayBooks = document.querySelector('#book-prompt');
+let appendTitle = document.querySelector('#title');
+let appendAuthor = document.querySelector('#author');
+let appendPages = document.querySelector('#pages');
+let appendStatus = document.querySelector('#status');
+let bookDisplay = document.querySelector('#book-display');
+let selectButtons = document.querySelectorAll('button');
 
 let myLibrary = [];
+let removeTables = null;
+
+////////////////////////////////////////
+
+let ulysses = new book('Ulysses', 'James Joyce', '542', 'not read');
+let crimeAndPunishment = new book('Crime and Punishment', 'Fyodor Dostoevsky', '576', 'not read');
+let firegirl = new book('Firegirl', 'Tony Abott', '90', 'read');
+myLibrary.push(ulysses);
+bookLoop();
+console.log(myLibrary);
 
 function book(title, author, pages, status) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.status = status;
-    this.info = () => {
-        return (this.title + ' by ' + this.author + ', ' + this.pages + ', ' + this.status);
-    }
 }
 
 function addBookToLibrary() {
@@ -49,12 +62,32 @@ function addBookToLibrary() {
 }
 
 function bookLoop() {
-    displayBooks.innerHTML = '';
+    let titleParagraph = document.createElement('p');
+    let authorParagraph = document.createElement('p');
+    let pagesParagraph = document.createElement('p');
+    let statusParagraph = document.createElement('p');
+    let removeButton = document.createElement('button');
     for (let objs of myLibrary) {
-        let paragraph = document.createElement('p');
-        paragraph.textContent = objs
-        displayBooks.appendChild(paragraph);
+        titleParagraph.textContent = objs.title
+        appendTitle.appendChild(titleParagraph);
+        authorParagraph.textContent = objs.author;
+        appendAuthor.appendChild(authorParagraph);
+        pagesParagraph.textContent = objs.pages;
+        appendPages.appendChild(pagesParagraph);
+        statusParagraph.textContent = objs.status;
+        appendStatus.appendChild(statusParagraph);
+        statusParagraph.setAttribute('index', myLibrary.indexOf(objs));
+        removeButton.setAttribute('index', myLibrary.indexOf(objs));
+        bookDisplay.appendChild(removeButton);
+        removeButton.id = 'index-number';
     }
+    selectButtons = document.querySelectorAll('button');
+    selectButtons.forEach((button) => {
+        removeTables = button.addEventListener('click', () => {
+            console.log(button.getAttribute('index'));
+        })
+    })
+    
 }
 
 let titlePrompt = document.createElement('p');
@@ -97,19 +130,15 @@ submit.addEventListener('click', () => {
     addBookUI.removeChild(bookPages);
     addBookUI.removeChild(bookStatus);
     addBookUI.removeChild(submit);
+    addBookUI.removeChild(titlePrompt);
+    addBookUI.removeChild(authorPrompt);
+    addBookUI.removeChild(pagesPrompt);
+    addBookUI.removeChild(statusPrompt);
     let createBook = new book(title, author, pages, status);
-    myLibrary.push(createBook.info());
+    myLibrary.push(createBook);
     bookLoop();
     bookTitle.value = '';
     bookAuthor.value = '';
     bookPages.value = '';
 });
 
-let Ulysses = new book('Ulysses', 'James Joyce', '542', 'not read');
-let crimeAndPunishment = new book('Crime and Punishment', 'Fyodor Dostoevsky', '576', 'not read');
-let firegirl = new book('Firegirl', 'Tony Abott', '90', 'read');
-myLibrary.push(Ulysses.info());
-myLibrary.push(crimeAndPunishment.info());
-myLibrary.push(firegirl.info());
-bookLoop();
-console.log(myLibrary);

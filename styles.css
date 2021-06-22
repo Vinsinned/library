@@ -2,6 +2,15 @@
     display: flex;
     justify-content: center;
 }
+#book-display {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-top: 50px;
+}
+.book-info {
+    border: 1px solid white;
+}
 body {
     background-color: #243119;
 }
