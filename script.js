@@ -34,11 +34,17 @@ let appendTitle = document.querySelector('#title');
 let appendAuthor = document.querySelector('#author');
 let appendPages = document.querySelector('#pages');
 let appendStatus = document.querySelector('#status');
+let appendButtons = document.querySelector('#buttons');
 let bookDisplay = document.querySelector('#book-display');
-let selectButtons = document.querySelectorAll('button');
+let selectButtons = document.querySelectorAll('#index-number');
 
 let myLibrary = [];
-let removeTables = null;
+let titleParagraph = null;
+let authorParagraph = null;
+let pagesParagraph = null;
+let statusParagraph = null;
+let selectStatus = null;
+let tableButtons = null;
 
 ////////////////////////////////////////
 
@@ -46,6 +52,8 @@ let ulysses = new book('Ulysses', 'James Joyce', '542', 'not read');
 let crimeAndPunishment = new book('Crime and Punishment', 'Fyodor Dostoevsky', '576', 'not read');
 let firegirl = new book('Firegirl', 'Tony Abott', '90', 'read');
 myLibrary.push(ulysses);
+myLibrary.push(crimeAndPunishment);
+myLibrary.push(firegirl);
 bookLoop();
 console.log(myLibrary);
 
@@ -62,12 +70,21 @@ function addBookToLibrary() {
 }
 
 function bookLoop() {
-    let titleParagraph = document.createElement('p');
-    let authorParagraph = document.createElement('p');
-    let pagesParagraph = document.createElement('p');
-    let statusParagraph = document.createElement('p');
-    let removeButton = document.createElement('button');
+    selectButtons.innerHTML = '';
+    appendTitle.innerHTML = '';
+    appendAuthor.innerHTML = '';
+    appendPages.innerHTML = '';
+    appendStatus.innerHTML = '';
+    appendButtons.innerHTML = '';
+    let selectStatus = null;
+    let selectRemoveButton = null;
     for (let objs of myLibrary) {
+        titleParagraph = document.createElement('p');
+        authorParagraph = document.createElement('p');
+        pagesParagraph = document.createElement('p');
+        statusParagraph = document.createElement('p');
+        tableButtons = document.createElement('button');
+        tableButtons.id = 'index-number';
         titleParagraph.textContent = objs.title
         appendTitle.appendChild(titleParagraph);
         authorParagraph.textContent = objs.author;
@@ -76,18 +93,23 @@ function bookLoop() {
         appendPages.appendChild(pagesParagraph);
         statusParagraph.textContent = objs.status;
         appendStatus.appendChild(statusParagraph);
-        statusParagraph.setAttribute('index', myLibrary.indexOf(objs));
-        removeButton.setAttribute('index', myLibrary.indexOf(objs));
-        bookDisplay.appendChild(removeButton);
-        removeButton.id = 'index-number';
+        statusParagraph.setAttribute('data-index', myLibrary.indexOf(objs));
+        tableButtons.setAttribute('data-index', myLibrary.indexOf(objs));
+        appendButtons.appendChild(tableButtons);
+        selectStatus = statusParagraph;
+        selectRemoveButton = tableButtons;
     }
     selectButtons = document.querySelectorAll('button');
-    selectButtons.forEach((button) => {
-        removeTables = button.addEventListener('click', () => {
-            console.log(button.getAttribute('index'));
+        selectButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+            console.log(button.getAttribute('data-index'));
+            if (selectStatus.getAttribute('data-index') == selectRemoveButton.getAttribute('index') && selectRemoveButton.getAttribute('index') != 0) {
+                let logIndex = selectRemoveButton.dataset.index;
+                myLibrary.splice(`${selectRemoveButton.dataset.index}`, 1);
+                bookLoop();
+            }
         })
     })
-    
 }
 
 let titlePrompt = document.createElement('p');
@@ -136,9 +158,12 @@ submit.addEventListener('click', () => {
     addBookUI.removeChild(statusPrompt);
     let createBook = new book(title, author, pages, status);
     myLibrary.push(createBook);
+    appendTitle.innerHTML = '';
+    appendAuthor.innerHTML = '';
+    appendPages.innerHTML = '';
+    appendStatus.innerHTML = '';
     bookLoop();
     bookTitle.value = '';
     bookAuthor.value = '';
     bookPages.value = '';
 });
-
