@@ -66,7 +66,11 @@ function book(title, author, pages, status) {
 }
 
 book.prototype.toggleBookRead = () => {
-    console.log(myLibrary.indexOf(crimeAndPunishment))
+    myLibrary[number].status = 'not read'
+}
+
+book.prototype.toggleBookNotRead = () => {
+    myLibrary[number].status = 'read';
 }
 
 function addBookToLibrary() {
@@ -74,6 +78,7 @@ function addBookToLibrary() {
     myLibrary.push(newBook.info());
 }
 
+number = null;
 function bookLoop() {
     let selectStatus = null;
     let selectToggle = null;
@@ -101,22 +106,21 @@ function bookLoop() {
         appendPages.appendChild(pagesParagraph);
         statusParagraph.textContent = objs.status;
         appendStatus.appendChild(statusParagraph);
-        toggleRead.setAttribute('data-index', myLibrary.indexOf(objs));
-        toggleRead.className = 'toggle-read';
-        appendToggle.appendChild(toggleRead);
         statusParagraph.setAttribute('data-index', myLibrary.indexOf(objs));
         tableButtons.setAttribute('data-index', myLibrary.indexOf(objs));
         tableButtons.className = 'remove';
+        toggleRead.setAttribute('data-index', myLibrary.indexOf(objs));
+        toggleRead.className = 'toggle-read';
         selectStatus = statusParagraph.getAttribute('data-index');
         selectRemoveButton = tableButtons.getAttribute('data-index');
-        appendButtons.appendChild(tableButtons);
         selectToggle = toggleRead.getAttribute('data-index');
-        console.log(selectToggle);
+        appendButtons.appendChild(tableButtons);
+        appendToggle.appendChild(toggleRead);
     }
     selectButtons = document.querySelectorAll('.remove');
         selectButtons.forEach((button) => {
             button.addEventListener('click', () => {
-            console.log(button.getAttribute('data-index'));
+                console.log(selectRemoveButton)
             if (selectStatus == selectRemoveButton && selectRemoveButton != 0) {
                 myLibrary.splice(`${button.getAttribute('data-index')}`, 1);
                 bookLoop();
@@ -127,8 +131,17 @@ function bookLoop() {
     toggleBook.forEach((toggle) => {
         toggle.addEventListener('click', () => {
             if (selectToggle == selectStatus) {
-                let number = parseInt(selectToggle);
-                console.log(myLibrary[number].status)
+                number = toggle.getAttribute('data-index');
+                console.log(myLibrary[toggle.getAttribute('data-index')])
+                if (myLibrary[toggle.getAttribute('data-index')].status == 'read') {
+                    myLibrary[toggle.getAttribute('data-index')].toggleBookRead();
+                    bookLoop();
+                } else if (myLibrary[toggle.getAttribute('data-index')].status == 'not read') {
+                    number = toggle.getAttribute('data-index');
+                    console.log('BOOK IS NOT READ... YET!');
+                    myLibrary[toggle.getAttribute('data-index')].toggleBookNotRead();
+                    bookLoop();
+                }
             }
         })
     })
