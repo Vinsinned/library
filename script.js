@@ -35,6 +35,7 @@ let appendAuthor = document.querySelector('#author');
 let appendPages = document.querySelector('#pages');
 let appendStatus = document.querySelector('#status');
 let appendButtons = document.querySelector('#buttons');
+let appendToggle = document.querySelector('#toggle')
 let bookDisplay = document.querySelector('#book-display');
 let selectButtons = document.querySelectorAll('#index-number');
 
@@ -64,25 +65,32 @@ function book(title, author, pages, status) {
     this.status = status;
 }
 
+book.prototype.toggleBookRead = () => {
+    console.log(myLibrary.indexOf(crimeAndPunishment))
+}
+
 function addBookToLibrary() {
     let newBook = new book('title', 'author', 'pages', 'status');
     myLibrary.push(newBook.info());
 }
 
 function bookLoop() {
+    let selectStatus = null;
+    let selectToggle = null;
+    let selectRemoveButton = null;
     selectButtons.innerHTML = '';
     appendTitle.innerHTML = '';
     appendAuthor.innerHTML = '';
     appendPages.innerHTML = '';
     appendStatus.innerHTML = '';
     appendButtons.innerHTML = '';
-    let selectStatus = null;
-    let selectRemoveButton = null;
+    appendToggle.innerHTML = '';
     for (let objs of myLibrary) {
         titleParagraph = document.createElement('p');
         authorParagraph = document.createElement('p');
         pagesParagraph = document.createElement('p');
         statusParagraph = document.createElement('p');
+        toggleRead = document.createElement('button');
         tableButtons = document.createElement('button');
         tableButtons.id = 'index-number';
         titleParagraph.textContent = objs.title
@@ -93,20 +101,34 @@ function bookLoop() {
         appendPages.appendChild(pagesParagraph);
         statusParagraph.textContent = objs.status;
         appendStatus.appendChild(statusParagraph);
+        toggleRead.setAttribute('data-index', myLibrary.indexOf(objs));
+        toggleRead.className = 'toggle-read';
+        appendToggle.appendChild(toggleRead);
         statusParagraph.setAttribute('data-index', myLibrary.indexOf(objs));
         tableButtons.setAttribute('data-index', myLibrary.indexOf(objs));
+        tableButtons.className = 'remove';
+        selectStatus = statusParagraph.getAttribute('data-index');
+        selectRemoveButton = tableButtons.getAttribute('data-index');
         appendButtons.appendChild(tableButtons);
-        selectStatus = statusParagraph;
-        selectRemoveButton = tableButtons;
+        selectToggle = toggleRead.getAttribute('data-index');
+        console.log(selectToggle);
     }
-    selectButtons = document.querySelectorAll('button');
+    selectButtons = document.querySelectorAll('.remove');
         selectButtons.forEach((button) => {
             button.addEventListener('click', () => {
             console.log(button.getAttribute('data-index'));
-            if (selectStatus.getAttribute('data-index') == selectRemoveButton.getAttribute('index') && selectRemoveButton.getAttribute('index') != 0) {
-                let logIndex = selectRemoveButton.dataset.index;
-                myLibrary.splice(`${selectRemoveButton.dataset.index}`, 1);
+            if (selectStatus == selectRemoveButton && selectRemoveButton != 0) {
+                myLibrary.splice(`${button.getAttribute('data-index')}`, 1);
                 bookLoop();
+            }
+        })
+    })
+    toggleBook = document.querySelectorAll('.toggle-read');
+    toggleBook.forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+            if (selectToggle == selectStatus) {
+                let number = parseInt(selectToggle);
+                console.log(myLibrary[number].status)
             }
         })
     })
@@ -141,12 +163,13 @@ addBook.addEventListener('click', () => {
     addBookUI.appendChild(submit);
 });
 
+let classForToggle = null;
 submit.addEventListener('click', () => {
     addBookUI.style.cssText = '';
     let title = bookTitle.value;
     let author = bookAuthor.value;
     let pages = bookPages.value;
-    let status = bookStatus.value;
+    let status = (bookStatus.value);
     addBookUI.removeChild(bookTitle);
     addBookUI.removeChild(bookAuthor);
     addBookUI.removeChild(bookPages);
