@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 #navbar {
     display: flex;
     justify-content: center;
@@ -9,16 +10,31 @@ td {
     border: 1px solid black;
     margin: auto;
     margin-top: 50px;
+    width: 650px;
+    background-color: #C9F2C7;
 }
-/*
-.book-info {
-    border: 1px solid white;
-}
-
-body {
-    background-color: #243119;
-}
-p {
+#add-book {
+    height: 40px;
+    width: 130px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
     color: white;
 }
-*/
+body {
+    background-color: #ACECA1;
+}
+button {
+    background-color: #55D449;
+    color: #243119;
+    border: none;
+    border-radius: 10px;
+    width: 80px;
+    height: 20px;
+}
+button:hover {
+    transform: scale(1.1);
+}
+#add-book:hover {
+    transition: 0.3s;
+    transform: rotate(360deg);
+}

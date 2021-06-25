@@ -115,6 +115,8 @@ function bookLoop() {
         createDataTitle.setAttribute('data-index', myLibrary.indexOf(objs));
         toggleRead.className = 'toggle';
         tableButtons.className = 'remove';
+        toggleRead.style.cssText = 'position: relative; margin-left: 20px;';
+        tableButtons.style.cssText = 'margin-left: 10px;'
         createRow.appendChild(createDataTitle);
         createRow.appendChild(createDataAuthor);
         createRow.appendChild(createDataPages);
@@ -157,10 +159,10 @@ let authorPrompt = document.createElement('p');
 let pagesPrompt = document.createElement('p');
 let statusPrompt = document.createElement('p');
 addBook.addEventListener('click', () => {
-    addBookUI.style.cssText = `background-color: #629460; position: absolute; 
+    addBookUI.style.cssText = `background-color: gray; position: absolute; 
     width: 500px; height: 500px; display: flex; 
     flex-direction: column;align-items: center;
-    margin-left: auto;margin-right: auto;margin-top: 70px;
+    margin-left: auto; margin-right: auto; top: 10%;
     left: 0; right: 0; text-align: center;`;
     titlePrompt.textContent = 'Title of Book:';
     addBookUI.appendChild(titlePrompt);
