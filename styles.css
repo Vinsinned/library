@@ -2,18 +2,23 @@
     display: flex;
     justify-content: center;
 }
+td {
+    border: 1px solid black;
+}
 #book-display {
-    display: flex;
-    justify-content: center;
-    position: relative;
+    border: 1px solid black;
+    margin: auto;
     margin-top: 50px;
 }
+/*
 .book-info {
     border: 1px solid white;
 }
+
 body {
     background-color: #243119;
 }
 p {
     color: white;
 }
+*/

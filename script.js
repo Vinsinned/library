@@ -1,4 +1,5 @@
 //Input text boxes to create a new book
+
 let bookTitle = document.createElement('input');
 let bookAuthor = document.createElement('input');
 let bookPages = document.createElement('input');
@@ -30,14 +31,7 @@ submit.style.cssText = 'margin-top: 20px;'
 let addBook = document.querySelector('#add-book');
 let addBookUI = document.querySelector('#submit-form')
 let displayBooks = document.querySelector('#book-prompt');
-let appendTitle = document.querySelector('#title');
-let appendAuthor = document.querySelector('#author');
-let appendPages = document.querySelector('#pages');
-let appendStatus = document.querySelector('#status');
-let appendButtons = document.querySelector('#buttons');
-let appendToggle = document.querySelector('#toggle')
 let bookDisplay = document.querySelector('#book-display');
-let selectButtons = document.querySelectorAll('#index-number');
 
 let myLibrary = [];
 let titleParagraph = null;
@@ -46,8 +40,8 @@ let pagesParagraph = null;
 let statusParagraph = null;
 let selectStatus = null;
 let tableButtons = null;
-
-////////////////////////////////////////
+let selectToggleButtons = null;
+let selectRemoveButtons = null;
 
 let ulysses = new book('Ulysses', 'James Joyce', '542', 'not read');
 let crimeAndPunishment = new book('Crime and Punishment', 'Fyodor Dostoevsky', '576', 'not read');
@@ -57,6 +51,7 @@ myLibrary.push(crimeAndPunishment);
 myLibrary.push(firegirl);
 bookLoop();
 console.log(myLibrary);
+////////////////////////////////////////
 
 function book(title, author, pages, status) {
     this.title = title;
@@ -78,75 +73,85 @@ function addBookToLibrary() {
     myLibrary.push(newBook.info());
 }
 
-number = null;
+//Loops through myLibrary and shows books in a table
+let number = null;
 function bookLoop() {
-    let selectStatus = null;
+    let selectDOMS = document.querySelector('#book-display');
+    let createHeaders = document.createElement('tr');
+    selectDOMS.innerHTML = '';
+    let createDataTitle = document.createElement('th');
+    let createDataAuthor = document.createElement('th');
+    let createDataPages = document.createElement('th');
+    let createDataStatus = document.createElement('th');
+    createDataTitle.textContent = 'Title';
+    createDataAuthor.textContent = 'Author';
+    createDataPages.textContent = 'Pages';
+    createDataStatus.textContent = 'Status';
+    createHeaders.appendChild(createDataTitle);
+    createHeaders.appendChild(createDataAuthor);
+    createHeaders.appendChild(createDataPages);
+    createHeaders.appendChild(createDataStatus);
+    selectDOMS.appendChild(createHeaders)
+    let checkSimilarity = null;
     let selectToggle = null;
     let selectRemoveButton = null;
-    selectButtons.innerHTML = '';
-    appendTitle.innerHTML = '';
-    appendAuthor.innerHTML = '';
-    appendPages.innerHTML = '';
-    appendStatus.innerHTML = '';
-    appendButtons.innerHTML = '';
-    appendToggle.innerHTML = '';
     for (let objs of myLibrary) {
-        titleParagraph = document.createElement('p');
-        authorParagraph = document.createElement('p');
-        pagesParagraph = document.createElement('p');
-        statusParagraph = document.createElement('p');
-        toggleRead = document.createElement('button');
-        tableButtons = document.createElement('button');
-        tableButtons.id = 'index-number';
-        titleParagraph.textContent = objs.title
-        appendTitle.appendChild(titleParagraph);
-        authorParagraph.textContent = objs.author;
-        appendAuthor.appendChild(authorParagraph);
-        pagesParagraph.textContent = objs.pages;
-        appendPages.appendChild(pagesParagraph);
-        statusParagraph.textContent = objs.status;
-        appendStatus.appendChild(statusParagraph);
-        statusParagraph.setAttribute('data-index', myLibrary.indexOf(objs));
-        tableButtons.setAttribute('data-index', myLibrary.indexOf(objs));
-        tableButtons.className = 'remove';
+        let createRow = document.createElement('tr');
+        createRow.className = 'books';
+        let createDataTitle = document.createElement('td');
+        let createDataAuthor = document.createElement('td');
+        let createDataPages = document.createElement('td');
+        let createDataStatus = document.createElement('td');
+        let toggleRead = document.createElement('button');
+        let tableButtons = document.createElement('button');
+        createDataTitle.textContent = objs.title;
+        createDataAuthor.textContent = objs.author;
+        createDataPages.textContent = objs.pages;
+        createDataStatus.textContent = objs.status;
+        toggleRead.textContent = 'Toggle'
+        tableButtons.textContent = 'Remove'
         toggleRead.setAttribute('data-index', myLibrary.indexOf(objs));
-        toggleRead.className = 'toggle-read';
-        selectStatus = statusParagraph.getAttribute('data-index');
-        selectRemoveButton = tableButtons.getAttribute('data-index');
+        tableButtons.setAttribute('data-index', myLibrary.indexOf(objs));
+        createDataTitle.setAttribute('data-index', myLibrary.indexOf(objs));
+        toggleRead.className = 'toggle';
+        tableButtons.className = 'remove';
+        createRow.appendChild(createDataTitle);
+        createRow.appendChild(createDataAuthor);
+        createRow.appendChild(createDataPages);
+        createRow.appendChild(createDataStatus);
+        createRow.appendChild(tableButtons);
+        createRow.appendChild(toggleRead);
+        selectDOMS.appendChild(createRow);
+        checkSimilarity = createDataTitle.getAttribute('data-index');
         selectToggle = toggleRead.getAttribute('data-index');
-        appendButtons.appendChild(tableButtons);
-        appendToggle.appendChild(toggleRead);
+        selectRemoveButton = tableButtons.getAttribute('data-index');
     }
-    selectButtons = document.querySelectorAll('.remove');
-        selectButtons.forEach((button) => {
-            button.addEventListener('click', () => {
-                console.log(selectRemoveButton)
-            if (selectStatus == selectRemoveButton && selectRemoveButton != 0) {
-                myLibrary.splice(`${button.getAttribute('data-index')}`, 1);
+    let bookToggle = document.querySelectorAll('.toggle');
+    let bookRemove = document.querySelectorAll('.remove');
+    bookToggle.forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+            if (myLibrary[toggle.getAttribute('data-index')].status == 'read') {
+                number = toggle.getAttribute('data-index');
+                myLibrary[selectToggle].toggleBookRead();
+                bookLoop();
+            } else if (myLibrary[toggle.getAttribute('data-index')].status == 'not read') {
+                number = toggle.getAttribute('data-index');
+                myLibrary[selectToggle].toggleBookNotRead();
                 bookLoop();
             }
-        })
-    })
-    toggleBook = document.querySelectorAll('.toggle-read');
-    toggleBook.forEach((toggle) => {
-        toggle.addEventListener('click', () => {
-            if (selectToggle == selectStatus) {
-                number = toggle.getAttribute('data-index');
-                console.log(myLibrary[toggle.getAttribute('data-index')])
-                if (myLibrary[toggle.getAttribute('data-index')].status == 'read') {
-                    myLibrary[toggle.getAttribute('data-index')].toggleBookRead();
-                    bookLoop();
-                } else if (myLibrary[toggle.getAttribute('data-index')].status == 'not read') {
-                    number = toggle.getAttribute('data-index');
-                    console.log('BOOK IS NOT READ... YET!');
-                    myLibrary[toggle.getAttribute('data-index')].toggleBookNotRead();
-                    bookLoop();
-                }
+        });
+    });
+    bookRemove.forEach((remove) => {
+        remove.addEventListener('click', () => {
+            if (selectRemoveButton == checkSimilarity && selectRemoveButton != 0) {
+                myLibrary.splice(`${remove.getAttribute('data-index')}`, 1);
+                bookLoop();
             }
         })
     })
 }
 
+//Prompt for adding a new book
 let titlePrompt = document.createElement('p');
 let authorPrompt = document.createElement('p');
 let pagesPrompt = document.createElement('p');
@@ -194,10 +199,6 @@ submit.addEventListener('click', () => {
     addBookUI.removeChild(statusPrompt);
     let createBook = new book(title, author, pages, status);
     myLibrary.push(createBook);
-    appendTitle.innerHTML = '';
-    appendAuthor.innerHTML = '';
-    appendPages.innerHTML = '';
-    appendStatus.innerHTML = '';
     bookLoop();
     bookTitle.value = '';
     bookAuthor.value = '';
