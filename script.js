@@ -42,6 +42,22 @@ let selectStatus = null;
 let tableButtons = null;
 let selectToggleButtons = null;
 let selectRemoveButtons = null;
+////////////////////////////////////////
+
+class book {
+    constructor(title, author, pages, status) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.status = status; 
+    }
+    toggleBookRead() {
+        myLibrary[number].status = 'not read'
+    }
+    toggleBookNotRead() {
+        myLibrary[number].status = 'read';
+    }
+}
 
 let ulysses = new book('Ulysses', 'James Joyce', '542', 'not read');
 let crimeAndPunishment = new book('Crime and Punishment', 'Fyodor Dostoevsky', '576', 'not read');
@@ -51,22 +67,6 @@ myLibrary.push(crimeAndPunishment);
 myLibrary.push(firegirl);
 bookLoop();
 console.log(myLibrary);
-////////////////////////////////////////
-
-function book(title, author, pages, status) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.status = status;
-}
-
-book.prototype.toggleBookRead = () => {
-    myLibrary[number].status = 'not read'
-}
-
-book.prototype.toggleBookNotRead = () => {
-    myLibrary[number].status = 'read';
-}
 
 function addBookToLibrary() {
     let newBook = new book('title', 'author', 'pages', 'status');
